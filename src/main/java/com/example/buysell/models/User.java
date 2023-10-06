@@ -5,6 +5,7 @@ import com.example.buysell.models.enums.Role;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,8 +21,8 @@ public class User implements UserDetails {
     private Long id;
     @Column(name = "email", unique = true)
     private String email;
-    @Column(name = "numberPhone", unique = true)
-    private String numberPhone;
+    @Column(name = "phone_number")
+    private String phoneNumber;
     @Column(name = "name")
     private String name;
     @Column(name = "active")
@@ -32,23 +33,30 @@ public class User implements UserDetails {
     @Column(name = "password", length = 1000)
     private String password;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private List<Product> products = new ArrayList<>();
     private LocalDateTime dateOfCreated;
 
+
     @PrePersist
     private void init() {
         dateOfCreated = LocalDateTime.now();
+    }
+
+    // security
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ROLE_ADMIN);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
-    //sequitur
 
     @Override
     public String getUsername() {

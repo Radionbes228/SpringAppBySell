@@ -4,6 +4,6 @@ import com.example.buysell.models.User;
 import com.example.buysell.models.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Role> {
-    User findUserByEmail(String email);
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByEmail(String email);
 }

@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -40,6 +40,8 @@ public class Product {
     private void init() {
         dateOfCreated = LocalDateTime.now();
     }
+
+
     public void addImageToProduct(Image image) {
         image.setProduct(this);
         images.add(image);
